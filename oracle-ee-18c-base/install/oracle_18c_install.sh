@@ -18,7 +18,7 @@ mkdir /u01 && chown oracle:dba /u01 && chmod 775 /u01
 
 #Download oracle database zip
 echo "Downloading oracle database zip"
-wget -q -O /oracle_database.zip "$ORACLE_DATABASE_DOWNLOAD_URL"
+wget -q --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=15CLHkPZzwih26oINeXvIB79Jny8zgqWh' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=15CLHkPZzwih26oINeXvIB79Jny8zgqWh" -O oracle_database.zip && rm -rf /tmp/cookies.txt
 
 #echo "Extracting oracle database zip"
 #su oracle -c 'unzip -q /oracle_database.zip -d /home/oracle/'
