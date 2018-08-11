@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-export INSTALL=$HOME/docker-oracle-ee-base-18c/install
+export INSTALL=$HOME/docker-oracle-ee-18c/install
 echo `hostname -I|awk '{print $1}'` `hostname -s` `hostname` >> /etc/hosts
 
 echo "Installing Dependencies"
@@ -16,6 +16,8 @@ echo "Creating Directory"
 #groupadd dba && useradd -m -G dba oracle
 rm -rf /u01
 mkdir /u01 && mkdir -p /u01/app/oracle/product/18.0.0/dbhome_1 && chown -R oracle:oinstall /u01 && chmod -R 775 /u01
+touch /etc/oratab
+chmod 777 /etc/oratab
 
 echo "Setting ENV"
 echo oracle:oracle | chpasswd
@@ -63,7 +65,7 @@ su oracle -c "$ORACLE_HOME/bin/netca -silent -responseFile $ORACLE_HOME/netca.rs
 
 
 echo "Configuring the TNS"
-sh $HOME/docker-oracle-ee-base-18c/install/tns.sh
+sh $HOME/docker-oracle-ee-18c/install/tns.sh
 chown oracle:oinstall $ORACLE_HOME/network/admin/tnsnames.ora
 
 echo "Testing Database"
