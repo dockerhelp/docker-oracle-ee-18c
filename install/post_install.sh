@@ -38,6 +38,6 @@ EOF
 
 echo "Cleaning up"
 rm -rf /tmp/*
-echo "DataBase started!!!"
+echo "DataBase Started!!!"
 gosu oracle  bash
 
