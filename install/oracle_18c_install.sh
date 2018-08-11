@@ -18,6 +18,7 @@ rm -rf /u01
 mkdir /u01 && mkdir -p /u01/app/oracle/product/18.0.0/dbhome_1 && chown -R oracle:oinstall /u01 && chmod -R 775 /u01
 touch /etc/oratab
 chmod 777 /etc/oratab
+chmod 755 /post_install.sh
 
 echo "Setting ENV"
 echo oracle:oracle | chpasswd
