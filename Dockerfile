@@ -1,12 +1,13 @@
 FROM oraclelinux
 
-RUN yum install -y wget unzip binutils.x86_64 compat-libcap1.x86_64 gcc.x86_64 gcc-c++.x86_64 glibc.i686 glibc.x86_64 \
-glibc-devel.i686 glibc-devel.x86_64 ksh compat-libstdc++-33 libaio.i686 libaio.x86_64 libaio-devel.i686 libaio-devel.x86_64 \
-libgcc.i686 libgcc.x86_64 libstdc++.i686 libstdc++.x86_64 libstdc++-devel.i686 libstdc++-devel.x86_64 libXi.i686 libXi.x86_64 \
-libXtst.i686 libXtst.x86_64 make.x86_64 sysstat.x86_64 && yum clean all
-
 RUN yum install -y wget unzip oracle-database-preinstall-18c && yum clean all
 
-ADD install /install
+ADD install/oracle_18c_install.sh oracle_18c_install.sh
+ADD install/tns.sh tns.sh
+ADD install/oracle-18c-ee.rsp oracle-18c-ee.rsp
+ADD install/netca.rsp netca.rsp
+ADD install/dbca_18c.rsp dbca_18c.rsp
+ADD install/gosu gosu
+ADD install/post_install.sh post_install.sh
 
-RUN /install/oracle_18c_install.sh /install/oracle-18c-ee.rsp
+RUN /oracle_18c_install.sh
