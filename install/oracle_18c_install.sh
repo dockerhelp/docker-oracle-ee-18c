@@ -20,10 +20,14 @@ touch /etc/oratab
 chmod 777 /etc/oratab
 chmod 755 $INSTALL/post_install.sh
 
+
 echo "Setting ENV"
 echo oracle:oracle | chpasswd
 export ORACLE_BASE=/u01/app/oracle
 export ORACLE_HOME=/u01/app/oracle/product/18.0.0/dbhome_1
+export ORACLE_SID=ORCL18 >> /home/oracle/.bash_profile
+export ORACLE_HOME=/u01/app/oracle/product/18.0.0/dbhome_1 >> /home/oracle/.bash_profile
+export PATH=$ORACLE_HOME/bin:$PATH >> /home/oracle/.bash_profile
 
 
 #Download oracle database zip
