@@ -13,13 +13,11 @@ libXtst.i686 libXtst.x86_64 make.x86_64 sysstat.x86_64 oracle-database-preinstal
 rm -rf /var/cache/yum
 
 echo "Creating Directory"
-#groupadd dba && useradd -m -G dba oracle
 rm -rf /u01
 mkdir -p /u01 && mkdir -p /u01/app/oracle/product/18.0.0/dbhome_1 && chown -R oracle:oinstall /u01 && chmod -R 775 /u01
 touch /etc/oratab
 chmod 777 /etc/oratab
 chmod 755 $INSTALL/post_install.sh
-
 
 echo "Setting ENV"
 echo oracle:oracle | chpasswd
@@ -35,8 +33,10 @@ echo "Downloading oracle database zip"
 wget -q --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=15CLHkPZzwih26oINeXvIB79Jny8zgqWh' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=15CLHkPZzwih26oINeXvIB79Jny8zgqWh" -O oracle_database.zip && rm -rf /tmp/cookies.txt
 
 echo "Extracting oracle database zip"
-su oracle -c 'unzip -q oracle_database.zip -d /u01/app/oracle/product/18.0.0/dbhome_1/'
-rm -f oracle_database.zip
+mv oracle_database.zip /home/oracle
+chmod 777 /home/oracle/oracle_database.zip
+su  oracle -c 'unzip -q /home/oracle/oracle_database.zip -d /u01/app/oracle/product/18.0.0/dbhome_1/'
+rm -f /home/oracle/oracle_database.zip
 
 echo "setting up Response files"
 cp $INSTALL/oracle-18c-ee.rsp $ORACLE_HOME/oracle-18c-ee.rsp
@@ -66,6 +66,7 @@ echo "Default 18c database install with PDB"
 su oracle -c "/u01/app/oracle/product/18.0.0/dbhome_1/bin/dbca -silent -createDatabase -responseFile $ORACLE_HOME/dbca_18c.rsp"
 
 echo "Starting default listener"
+ps -ef | grep tnslsnr| grep -v grep| awk '{print $2}'|xargs -i kill -9 {}
 su oracle -c "$ORACLE_HOME/bin/netca -silent -responseFile $ORACLE_HOME/netca.rsp"
 
 
@@ -74,7 +75,7 @@ sh $HOME/docker-oracle-ee-18c/install/tns.sh
 chown oracle:oinstall $ORACLE_HOME/network/admin/tnsnames.ora
 
 echo "Testing Database"
-su - oracle <<EOF 
+su - oracle <<EOF
 export ORACLE_SID=ORCL18
 export ORACLE_BASE=/u01/app/oracle
 export ORACLE_HOME=/u01/app/oracle/product/18.0.0/dbhome_1
